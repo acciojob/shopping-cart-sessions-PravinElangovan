@@ -30,16 +30,22 @@ const products = [
       }
 
       // Render cart list
-      function renderCart() {
-        cartList.innerHTML = "";
-        const cart = getCart();
-        for (const [productId, quantity] of Object.entries(cart)) {
-          const product = products.find((p) => p.id === parseInt(productId));
-          const li = document.createElement("li");
-          li.innerHTML = `${product.name} x ${quantity} - $${product.price * quantity} <button class="remove-from-cart-btn" data-id="${product.id}">Remove</button>`;
-          cartList.appendChild(li);
-        }
-      }
+      // Render cart list
+function renderCart() {
+  cartList.innerHTML = "";
+  const cart = getCart();
+  for (const [productId, quantity] of Object.entries(cart)) {
+    const product = products.find((p) => p.id === parseInt(productId));
+    const li = document.createElement("li");
+    li.innerHTML = `${product.name} x ${quantity} - $${product.price * quantity} <button class="remove-from-cart-btn" id="${product.id}">Remove</button>`;
+    cartList.appendChild(li);
+  }
+  const removeButtons = document.querySelectorAll(".remove-from-cart-btn");
+  removeButtons.forEach((button) => {
+    button.addEventListener("click", removeFromCart);
+  });
+}
+
 
       // Get cart data from session storage
       function getCart() {
@@ -62,12 +68,19 @@ const products = [
 
       // Remove item from cart
       // Remove item from cart
-function removeFromCart(productId) {
+function removeFromCart(event) {
   const cart = getCart();
-  delete cart[productId];
+  delete cart[event.target.id];
   updateCart(cart);
-  renderCart();
+  
 }
+function removeFromCart(event) {
+  const cart = getCart();
+  delete cart[event.target.id];
+  updateCart(cart);
+	renderCart()
+}
+
 
 
       // Clear cart
